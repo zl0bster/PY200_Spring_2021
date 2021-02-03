@@ -66,37 +66,7 @@ class LinkedList:
         """Метод должен возвращать строку, показывающую, как может быть создан экземпляр."""
         return ""
 
-    def is_iterable(self, data):
-        """Метод для проверки является ли объект итерируемым"""
-        ...
-
-    def append(self, value):
-        """Добавление элемента в конец связного списка"""
-        append_node = self.Node(value)
-        if self.head is None:
-            self.head = append_node
-        else:
-            tail = self.head  # ToDo Завести атрибут self.tail, который будет хранить последний узел. O(n) -> O(1)
-            for _ in range(self.len_ - 1):
-                tail = tail.next
-            self.__linked_nodes(tail, append_node)
-
-        self.len_ += 1
-
-    @staticmethod
-    def __linked_nodes(left: Node, right: Optional[Node]):
-        left.next = right
-
-    def insert(self, index: int, value: Any):
-        ...
-
-    def find(self, value):
-        ...
-
-    def remove(self, value):
-        ...
-
-    def len(self):
+    def __len__(self):
         ...
 
     def __getitem__(self, item: int) -> Any:
@@ -105,16 +75,43 @@ class LinkedList:
     def __setitem__(self, key, value):
         ...
 
-    def __delitem__(self, key):
+    def append(self, value: Any):
+        """Добавление элемента в конец связного списка"""
+        append_node = self.Node(value)
+        if self.head is None:
+            self.head = append_node
+        else:
+            tail = self.head  # ToDo Завести атрибут self.tail, который будет хранить последний узел
+            for _ in range(self.len_ - 1):
+                tail = tail.next
+            self.__linked_nodes(tail, append_node)
+
+        self.len_ += 1
+
+    @staticmethod
+    def __linked_nodes(left: Node, right: Optional[Node]) -> None:
+        left.next = right
+
+    def to_list(self) -> list:
         ...
 
-    def clear(self):
+    def insert(self, index: int, value: Any) -> None:
         ...
 
-    def to_list(self):
+    def clear(self) -> None:
         ...
 
-    def sort(self):
+    def index(self, value: Any) -> int:
+        ...
+
+    def remove(self, value: Any) -> None:
+        ...
+
+    def sort(self) -> None:
+        ...
+
+    def is_iterable(self, data) -> bool:
+        """Метод для проверки является ли объект итерируемым"""
         ...
 
 

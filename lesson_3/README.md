@@ -48,6 +48,7 @@ https://github.com/aeksei/PY200_Spring_2021/blob/master/lesson_3/lesson_3.ipynb
 
 # Задания для дополнительной самостоятельной работы
 1. Реализовать для **`LinkedList`** магический метод **`__reversed__`**
-2. Создать класс **`KMPstring`**, который будет наследоваться от встроеннго класса **`str`**, который отвечает за строки
+2. Реализовать в **`LinkedList`** работу магического метода **`__getitem__`** со [слайсированием](https://railsware.com/blog/python-for-machine-learning-indexing-and-slicing-for-lists-tuples-strings-and-other-sequential-types/#Slice_Object) и отрицательной индексацией
+3. Создать класс **`KMPstring`**, который будет наследоваться от встроеннго класса **`str`**, который отвечает за строки
 в Python. В дочернем классе переопределить метод **`__contains__`**, который будет искать вхождение подстроки в строке с 
 помощью алгоритма Кнута — Морриса — Пратта.

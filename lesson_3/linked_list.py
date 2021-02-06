@@ -80,12 +80,14 @@ class LinkedList:
 
     def __str__(self):
         """Вызывается функциями str, print и format. Возвращает строковое представление объекта."""
-        result = ""
+        result = "[]" if self.__len == 0 else "["
         separator = "; "
         for current_node in self.__list_iteration():
             result += str(current_node.value)
             if not (current_node.next is None):
                 result += separator
+            else:
+                result += "]"
         return result
 
     def __list_iteration(self):
@@ -145,7 +147,7 @@ class LinkedList:
         return [value for value in self]
 
     def insert(self, index: int, value: Any) -> None:
-        # if
+        self.__check_index(index)
         if index == 0:
             currentNode = self.head
             newNode = self.Node(value=value, next_=currentNode)
@@ -169,7 +171,10 @@ class LinkedList:
         self.__len = 0
 
     def index(self, value: Any) -> int:
-        ...
+        for i, currNode in enumerate(self.__list_iteration()):
+            if currNode.value == value:
+                return i
+        raise ValueError(f"{value} is not in list")
 
     def remove(self, value: Any) -> None:
         lastNode = self.head
@@ -186,10 +191,25 @@ class LinkedList:
                 current_node.next = None
                 return
             lastNode = current_node
-        raise ValueError
+        raise ValueError(f"list.remove(x): {value} is not in list")
 
     def sort(self) -> None:
-        ...
+        """Bubble sort"""
+        if self.__len < 2:
+            return
+        while True:
+            swapCount = 0
+            lastNode = self.head
+            for currNode in self.__list_iteration():
+                if lastNode.value > currNode.value:
+                    temp = lastNode.value
+                    lastNode.value = currNode.value
+                    currNode.value = temp
+                    swapCount += 1
+                lastNode = currNode
+            print(swapCount)
+            if swapCount == 0:
+                return
 
     def is_iterable(self, data) -> bool:
         """Метод для проверки является ли объект итерируемым"""
@@ -224,6 +244,8 @@ if __name__ == '__main__':
     print(ll)
     # ll.insert(-2, 13)
     print('*' * 10)
+    ll.sort()
+    print(ll)
     ll.remove(11)
     ll.remove(1)
     # ll.head = 0

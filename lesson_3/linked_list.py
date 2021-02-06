@@ -118,8 +118,23 @@ class LinkedList:
         return currentNode
 
     def __getitem__(self, item: int) -> Any:
-        currentNode = self.__step_by_step(index=item)
-        return currentNode.value
+        if isinstance(item, int):
+            currentNode = self.__step_by_step(index=item)
+            return currentNode.value
+        start = item.start if item.start else 0
+        stop = item.stop if item.stop else self.__len - 1
+        step = item.step if item.step else 1
+        if start < 0 or stop < 0:
+            raise IndexError(f"Start={start} and Stop={stop} index should be positive for this version")
+        result = []
+        for i, curNode in enumerate(self.__list_iteration()):
+            if start <= i <= stop:
+                if ((i - start) % step) == 0:
+                    if step > 0:
+                        result.append(curNode.value)
+                    else:
+                        result.insert(0, curNode.value)
+        return result
 
     def __setitem__(self, key, value):
         currentNode = self.__step_by_step(key)
@@ -251,6 +266,8 @@ if __name__ == '__main__':
     # ll.head = 0
     print(ll)
     ll.clear()
-    print(ll)
-    ll2 = LinkedList(1)
-    print(ll2)
+    print(ll[1:4])
+    ll2 = LinkedList(range(30))
+    print(ll2[5:15:2])
+    print(ll2[5:15:-2])
+    print(ll2[5:-15:-2])

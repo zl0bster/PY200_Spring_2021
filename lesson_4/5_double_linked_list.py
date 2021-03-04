@@ -72,12 +72,61 @@ class DoubleLinkedList(LinkedList):
         self._len += 1
         print(self._len)
 
+    def insert(self, index: int, value: Any) -> None:
+        ''' при добавледнии последним номером сдвигает крайний
+        и становится на его место предпоследним'''
+        super()._check_index(index)
+        if index == 0:
+            currentNode = self.head
+            newNode = self.DoubleLinkedNode(value=value, next_=currentNode)
+            self.head = newNode
+        elif 0 <= index < (self._len ):
+            currentNode = self._step_by_step(index=index)
+            newNode = self.DoubleLinkedNode(value=value, next_=currentNode.next, prev_=currentNode)
+            currentNode.next = newNode
+        # elif index == (self._len - 1):
+        #     currentNode = self.tail
+        #     newNode = self.DoubleLinkedNode(value=value, prev_=currentNode)
+        #     currentNode.next = newNode
+        #     self.tail = newNode
+        else:
+            raise IndexError
+        self._len += 1
+
+    def remove(self, value: Any) -> None:
+        lastNode = self.head
+        for current_node in self._list_iteration():
+            if value == current_node.value:
+                if current_node == self.head:
+                    self.head = current_node.next
+                    current_node.next.prev = None
+                elif current_node == self.tail:
+                    self.tail = lastNode
+                    lastNode.next = None
+                else:
+                    next_node = current_node.next
+                    lastNode.next = next_node
+                    # next_node.prev = lastNode
+                self._len -= 1
+                current_node.next = None
+                current_node.prev = None
+                return
+            lastNode = current_node
+        raise ValueError(f"list.remove(x): {value} is not in list")
+
 
 if __name__ == '__main__':
     ll2 = DoubleLinkedList(range(30))
     print(ll2)
     print(len(ll2))
     print(repr(ll2))
-    ll3 = repr(ll2)
-    print(ll3)
-    print(len(ll3))
+    # i:int=15
+    ll2.insert(index=29, value=555)
+    ll2.insert(index=0, value=555)
+    print(ll2)
+    print("* "*10)
+    ll2.remove(value=555)
+    ll2.remove(value=15)
+    ll2.remove(value=18)
+    ll2.remove(value=555)
+    print(ll2)

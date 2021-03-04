@@ -83,7 +83,7 @@ class LinkedList:
         """Вызывается функциями str, print и format. Возвращает строковое представление объекта."""
         result = "[" if self else "[]"
         separator = ", "
-        for current_node in self.__list_iteration():
+        for current_node in self._list_iteration():
             result += str(current_node.value)
             if not (current_node.next is None):
                 result += separator
@@ -91,7 +91,7 @@ class LinkedList:
                 result += "]"
         return result
 
-    def __list_iteration(self):  # O(N)-iterator
+    def _list_iteration(self):  # O(N)-iterator
         current_node = self.head
         for _ in range(self._len):
             yield current_node
@@ -105,14 +105,14 @@ class LinkedList:
     def __len__(self):
         return self._len
 
-    def __check_index(self, index: int):
-        if isinstance(index, int):
+    def _check_index(self, index: int):
+        if not isinstance(index, int):
             raise TypeError
         if not (0 <= index < self._len):
             raise IndexError
 
-    def __step_by_step(self, index: int) -> Node:
-        self.__check_index(index=index)
+    def _step_by_step(self, index: int) -> Node:
+        self._check_index(index=index)
         currentNode = self.head
         for _ in range(index):
             currentNode = currentNode.next
@@ -120,7 +120,7 @@ class LinkedList:
 
     def __getitem__(self, item: [int, slice]) -> Any:
         if isinstance(item, int):
-            currentNode = self.__step_by_step(index=item)
+            currentNode = self._step_by_step(index=item)
             return currentNode.value
         start = item.start if item.start else 0
         stop = item.stop if item.stop else self._len - 1
@@ -128,7 +128,7 @@ class LinkedList:
         if start < 0 or stop < 0:
             raise IndexError(f"Start={start} and Stop={stop} index should be positive for this version")
         result = []
-        for i, curNode in enumerate(self.__list_iteration()):
+        for i, curNode in enumerate(self._list_iteration()):
             if start <= i <= stop:
                 if ((i - start) % step) == 0:
                     if step > 0:
@@ -138,8 +138,8 @@ class LinkedList:
         return result
 
     def __setitem__(self, key, value):
-        self.__check_index(key)
-        currentNode = self.__step_by_step(key)
+        self._check_index(key)
+        currentNode = self._step_by_step(key)
         currentNode.value = value
 
     def append(self, value: Any):
@@ -164,20 +164,22 @@ class LinkedList:
         return [value for value in self]
 
     def insert(self, index: int, value: Any) -> None:
-        self.__check_index(index)
+        ''' при добавледнии последним номером сдвигает крайний
+                и становится на его место предпоследним'''
+        self._check_index(index)
         if index == 0:
             currentNode = self.head
             newNode = self.Node(value=value, next_=currentNode)
             self.head = newNode
-        elif 0 <= index < (self._len - 1):
-            currentNode = self.__step_by_step(index=index)
+        elif 0 <= index < (self._len):
+            currentNode = self._step_by_step(index=index)
             newNode = self.Node(value=value, next_=currentNode.next)
             currentNode.next = newNode
-        elif index == (self._len - 1):
-            currentNode = self.tail
-            newNode = self.Node(value=value)
-            currentNode.next = newNode
-            self.tail = newNode
+        # elif index == (self._len - 1):
+        #     currentNode = self.tail
+        #     newNode = self.Node(value=value)
+        #     currentNode.next = newNode
+        #     self.tail = newNode
         else:
             raise IndexError
         self._len += 1
@@ -188,14 +190,14 @@ class LinkedList:
         self._len = 0
 
     def index(self, value: Any) -> int:  # O(N)
-        for i, currNode in enumerate(self.__list_iteration()):
+        for i, currNode in enumerate(self._list_iteration()):
             if currNode.value == value:
                 return i
         raise ValueError(f"{value} is not in list")
 
     def remove(self, value: Any) -> None:
         lastNode = self.head
-        for current_node in self.__list_iteration():
+        for current_node in self._list_iteration():
             if value == current_node.value:
                 if current_node == self.head:
                     self.head = current_node.next
@@ -217,7 +219,7 @@ class LinkedList:
         while True:
             swapCount = 0
             lastNode = self.head
-            for currNode in self.__list_iteration():
+            for currNode in self._list_iteration():
                 if lastNode.value > currNode.value:
                     temp = lastNode.value
                     lastNode.value = currNode.value
@@ -236,8 +238,8 @@ class LinkedList:
         return any(item == value for value in self)
 
     def __iter__(self):  # ToDo перегрузить метод для работы с циклом for
-        print('Вызван метод __iter__')
-        return self.__list_iteration()
+        # print('Вызван метод __iter__')
+        return self._list_iteration()
 
 
 if __name__ == '__main__':
